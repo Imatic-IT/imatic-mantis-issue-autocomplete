@@ -1,0 +1,5 @@
+<?php
+
+$s_plugin_ImaticIssueAutocomplete_min_search_length_message = 'Minimální délka hledaného výrazu je %d znaky.';
+$s_plugin_ImaticIssueAutocomplete_no_issue_found_message = 'Nenalezeny žádné výsledky.';
+$s_plugin_ImaticIssueAutocomplete_search_for_issue_message = 'Vyhledat podle popisu';
