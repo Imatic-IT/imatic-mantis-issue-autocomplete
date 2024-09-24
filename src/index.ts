@@ -1,12 +1,12 @@
-import {IssueAutocomplete} from "./components/IssueAutocomplete";
+import {IssueWhisperer} from "./components/IssueWhisperer";
 
 (function () {
-    let issueAutocomplete: IssueAutocomplete | null = null;
-    issueAutocomplete = new IssueAutocomplete();
+    let issueWhisperer: IssueWhisperer | null = null;
+    issueWhisperer = new IssueWhisperer();
     window.addEventListener('unload', () => {
-        if (issueAutocomplete) {
-            issueAutocomplete.destroy();
-            issueAutocomplete = null;
+        if (issueWhisperer) {
+            issueWhisperer.destroy();
+            issueWhisperer = null;
         }
     });
 })();

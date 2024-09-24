@@ -18,7 +18,7 @@ const settingsSchema = z.object({
 
 type settingsModel = z.infer<typeof settingsSchema>;
 
-export class IssueAutocomplete {
+export class IssueWhisperer {
     private overlayElement!: HTMLElement;
     private activeInput!: HTMLInputElement;
     private issueListElement!: HTMLUListElement;

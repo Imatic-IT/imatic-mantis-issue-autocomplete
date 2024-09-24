@@ -56,8 +56,9 @@ public function config(): array
 
 
 ## Installation
-- Copy all files from Imatic Mantis Issue Type Checker into the plugins/ImaticIssueAutocomplete directory.
+- Copy all files from Imatic Mantis Issue Type Checker into the plugins/ImaticWhisperer directory.
 - In Mantis plugins page, install the plugin.
+- run npm install
 
 ## Browser Requirements
 
@@ -66,7 +67,7 @@ The plugin requires a modern browser that supports ES6 features. Ensure your bro
 
 ## Compatibility and Customization
 
-- **Database Compatibility**: This plugin has been tested primarily with PostgreSQL. The provided query for MySQL in the `plugins/ImaticIssueAutocomplete/pages/searchIssue.php` file may not function correctly and will need further testing and adjustments.
+- **Database Compatibility**: This plugin has been tested primarily with PostgreSQL. The provided query for MySQL in the `plugins/ImaticWhisperer/pages/searchIssue.php` file may not function correctly and will need further testing and adjustments.
 
 - **Support for Other Databases**: Additional modifications are required to ensure compatibility with other database types. You can explore and implement necessary changes in the `buildFinalQuery()` method.
 

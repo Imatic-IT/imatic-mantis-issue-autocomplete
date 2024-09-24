@@ -61,7 +61,7 @@ class ImaticWhispererPlugin extends MantisPlugin
             'fieldSeparator' => plugin_config_get('fieldSeparator'),
             'submitOnSelect' => plugin_config_get('submitOnSelect'),
         ]));
-        echo '<script  id="imaticIssueAutocomplete" data-data="' . $t_data . '" src="' . plugin_file('bundle.js') . '&v=' . $this->version . '"></script>
+        echo '<script  id="imaticWhisperer" data-data="' . $t_data . '" src="' . plugin_file('bundle.js') . '&v=' . $this->version . '"></script>
             <link rel="stylesheet" type="text/css" href="' . plugin_file('style.css') . '&v=' . $this->version . '" />';
     }
 }
