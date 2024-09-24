@@ -14,14 +14,14 @@
     padding: 5px 10px;
     border-radius: 3px;
     cursor: pointer;
-    /*width: 50px;*/
 }
+
 .issue-button:hover {
     background-color: #0056b3;
 }
 
 .issue-summary {
-    flex: 1;
+    /*flex: 1;*/
 }
 
 .no-issues-item {
@@ -32,6 +32,18 @@
     font-size: 30px;
 }
 
-#issue-autocomplete{
+#issue-autocomplete {
     margin: 0 5px;
+}
+
+.issue-search-input {
+    width: 90%;
+    margin: 5px auto;
+    border: 1px solid grey !important;
+    display: block;
+}
+
+.issue-highlighted{
+    background-color: #ffffff;
+    color: #1a1a1a;
 }

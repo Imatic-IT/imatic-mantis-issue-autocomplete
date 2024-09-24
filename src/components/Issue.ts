@@ -6,6 +6,8 @@ const issueResponseSchema = z.object(
         id: z.string(),
         summary: z.string(),
         project: z.string(),
+        status: z.string(),
+        statusColor: z.string(),
     }
 );
 
@@ -49,9 +51,9 @@ export class Issue {
             }
         } catch (error: unknown) {
             if (error instanceof Error) {
-                console.error('Fetch issues failed:', error.message);
+                throw new Error(`Error fetching issues: ${error.message}`);
             } else {
-                console.error('Unknown error occurred');
+                throw new Error(`Error fetching issues: ${error}`);
             }
             return [];
         }

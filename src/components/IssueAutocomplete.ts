@@ -1,28 +1,29 @@
-import {Issue} from "./Issue";
-import {getSettings} from "../utils/utils";
-import {z} from "zod";
-import {html, render} from 'lit-html';
+import { Issue, issueModel } from "./Issue";
+import { getSettings } from "../utils/utils";
+import { z } from "zod";
+import { html, render } from 'lit-html';
 import debounce from 'lodash/debounce';
-import {issueModel} from "./Issue";
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
 
 const settingsSchema = z.object({
-    autocomplete_issue_window_settings: z.record(z.string()),
-    min_search_length: z.number(),
-    min_search_length_message: z.string(),
-    no_issue_found_message: z.string(),
-    search_for_issue_message: z.string(),
+    autocompleteIssueWindowSettings: z.record(z.string()),
+    minSearchLength: z.number(),
+    minSearchLengthMessage: z.string(),
+    noIssueFoundMessage: z.string(),
+    searchForIssueMessage: z.string(),
+    searchInputNames: z.array(z.string()),
+    fieldSeparator: z.string(),
+    submitOnSelect: z.boolean(),
 });
 
 type settingsModel = z.infer<typeof settingsSchema>;
 
 export class IssueAutocomplete {
     private overlayElement!: HTMLElement;
-    private originalInput!: HTMLInputElement;
-    private originalInputName: string = 'dest_bug_id';
-    private clonedInput!: HTMLInputElement;
-    private clonedInputId: string = 'issue-autocomplete';
+    private activeInput!: HTMLInputElement;
     private issueListElement!: HTMLUListElement;
     private settings!: settingsModel;
+    private overlaySearchInput!: HTMLInputElement;
 
     constructor() {
         this.init();
@@ -30,15 +31,11 @@ export class IssueAutocomplete {
 
     private async init() {
         this.settings = settingsSchema.parse(getSettings());
-        this.originalInput = document.querySelector(`input[name="${this.originalInputName}"]`)! as HTMLInputElement;
-        this.cloneInputElement();
         this.createListIssuesOverlay();
-
-        this.clonedInput.addEventListener('input', debounce(this.onInput, 300) as EventListener);
+        this.initializeSearchInputs();
 
         document.addEventListener('keydown', this.closeOnEsc);
-        document.addEventListener('click', this.closeOnClick, {passive: true});
-
+        document.addEventListener('click', this.closeOnClick, { passive: true });
         this.issueListElement.addEventListener('click', this.onIssueClick);
     }
 
@@ -52,6 +49,31 @@ export class IssueAutocomplete {
         requestAnimationFrame(() => {
             this.overlayElement.style.display = 'none';
         });
+    }
+
+    private initializeSearchInputs(): void {
+        const searchInputSettings: string[] = this.settings.searchInputNames.concat('issue-search-input');
+
+        searchInputSettings.forEach(name => {
+            const inputs = Array.from(document.querySelectorAll(`input[name="${name}"]`)) as HTMLInputElement[];
+
+            inputs.forEach((input: HTMLInputElement) => {
+                input.addEventListener('input', debounce(this.onInput, 300) as EventListener);
+                input.addEventListener('focus', (event: Event) => {
+                    if (input !== this.overlaySearchInput) {
+                        this.setActiveInput(event.target as HTMLInputElement);
+                    }
+                });
+            });
+        });
+    }
+
+    private setActiveInput(input: HTMLInputElement): void {
+        this.activeInput = input;
+    }
+
+    private getActiveInput(): HTMLInputElement {
+        return this.activeInput;
     }
 
     private closeOnEsc = (event: KeyboardEvent) => {
@@ -68,56 +90,95 @@ export class IssueAutocomplete {
         }
     }
 
-    private cloneInputElement(): void {
-        if (this.originalInput) {
-            this.clonedInput = this.originalInput.cloneNode(true) as HTMLInputElement;
-            this.clonedInput.id = this.clonedInputId;
-            this.clonedInput.placeholder = this.settings.search_for_issue_message;
-            this.clonedInput.name = 'issue_autocomplete';
-            this.originalInput.insertAdjacentElement('afterend', this.clonedInput);
+    private onIssueClick = (event: MouseEvent) => {
+        if (!(event.target instanceof HTMLButtonElement)) {
+            return;
+        }
+
+        const activeInput: HTMLInputElement = this.getActiveInput();
+        if (!activeInput) {
+            return;
+        }
+        const target: HTMLButtonElement = event.target as HTMLButtonElement;
+        activeInput.value = target.dataset.id!;
+
+        if (this.settings.submitOnSelect) {
+            this.submitActiveInput(activeInput);
+        }
+
+        this.hide();
+    }
+
+    private submitActiveInput(input: HTMLInputElement): void {
+        const form: HTMLFormElement = input.closest('form')!;
+        if (form) {
+            form.submit(); // Submit the form
+        } else {
+            throw new Error('No form found');
         }
     }
 
-    private onIssueClick = (event: MouseEvent) => {
-        const button = (event.target as HTMLElement).closest('.issue-button');
-        if (button) {
-            this.setRelatedIssueIdIntoTheInput(button.getAttribute('data-id')!);
-        }
+    private getIssueIdFromUrl(): string | null {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('id');
     }
 
     private renderIssues(issues: issueModel[]): void {
+        const currentIssueId = this.getIssueIdFromUrl();
+
         const template = html`
             ${issues.length > 0
-                    ? issues.map(issue => html`
-                        <li class="issue-item">
-                            <button class="issue-button" data-id="${issue.id}">${issue.id}</button>
-                            |
-                            <span class="">${issue.project}</span> |
+            ? issues.map(issue => {
+                const isHighlighted = currentIssueId && currentIssueId === parseInt(issue.id, 10).toString();
+                return html`
+                        <li class="issue-item ${isHighlighted ? 'issue-highlighted' : ''}">
+                            <button class="issue-button fa fa-external-link"
+                                    data-id="${issue.id}">
+                            </button>
+
+                            <span>${unsafeHTML(this.settings.fieldSeparator)}</span>
+
+                            <a href="view.php?id=${issue.id}" target="_blank">${issue.id}</a>
+
+                            <span>${unsafeHTML(this.settings.fieldSeparator)}</span>
+
+                            <span>${issue.project}</span>
+
+                            <span>${unsafeHTML(this.settings.fieldSeparator)}</span>
+
+                            <i class="fa fa-square fa-status-box ${issue.statusColor}"></i>
+                            <span class="${issue.statusColor}">${issue.status}</span>
+
+                            <span>${unsafeHTML(this.settings.fieldSeparator)}</span>
+
                             <span class="issue-summary">${issue.summary}</span>
                         </li>
-                    `)
-                    : html`
-                        <li class="no-issues-item">${this.settings.no_issue_found_message}</li>`}
+                    `;
+            })
+            : html`
+                    <li class="no-issues-item">${this.settings.noIssueFoundMessage}</li>`}
         `;
         render(template, this.issueListElement);
     }
 
-    private setRelatedIssueIdIntoTheInput(issueId: string): void {
-        this.originalInput.value = issueId;
-        this.hide();
-    }
-
     private createListIssuesOverlay(): void {
-        this.overlayElement = document.createElement('div')
+        this.overlayElement = document.createElement('div');
+
+        const searchInput = document.createElement('input');
+        searchInput.setAttribute('type', 'text');
+        searchInput.classList.add('issue-search-input');
+        searchInput.name = 'issue-search-input';
+
+        this.overlaySearchInput = searchInput;
 
         Object.assign(this.overlayElement.style, {
             position: 'fixed',
             top: '50%',
             left: '50%',
-            width: this.settings.autocomplete_issue_window_settings.width,
-            height: this.settings.autocomplete_issue_window_settings.height,
+            width: this.settings.autocompleteIssueWindowSettings.width,
+            height: this.settings.autocompleteIssueWindowSettings.height,
             transform: 'translate(-50%, -50%)',
-            background: this.settings.autocomplete_issue_window_settings.background,
+            background: this.settings.autocompleteIssueWindowSettings.background,
             zIndex: '10000',
             overflow: 'auto',
             boxSizing: 'border-box',
@@ -132,6 +193,7 @@ export class IssueAutocomplete {
             padding: '0',
             width: '100%',
         });
+        this.overlayElement.appendChild(searchInput);
         this.overlayElement.appendChild(this.issueListElement);
         document.body.appendChild(this.overlayElement);
     }
@@ -144,7 +206,10 @@ export class IssueAutocomplete {
             return;
         }
 
-        if (value.length < this.settings.min_search_length) {
+        const searchInput = document.querySelector('.issue-search-input') as HTMLInputElement;
+        searchInput.value = value;
+
+        if (value.length < this.settings.minSearchLength) {
             this.renderShortMessage();
         } else {
             const issue = new Issue();
@@ -154,16 +219,23 @@ export class IssueAutocomplete {
     }
 
     private renderShortMessage(): void {
-
         const template = html`
-            <li class="no-issues-item">${this.settings.min_search_length_message}</li>
+            <li class="no-issues-item">${this.settings.minSearchLengthMessage}</li>
         `;
         render(template, this.issueListElement);
         return;
     }
 
     public destroy(): void {
-        this.clonedInput.removeEventListener('input', this.onInput);
+        const searchInputSettings: string[] = this.settings.searchInputNames.concat('issue-search-input');
+
+        searchInputSettings.forEach(name => {
+            const inputs = Array.from(document.querySelectorAll(`input[name="${name}"]`)) as HTMLInputElement[];
+            inputs.forEach((input: HTMLInputElement) => {
+                input.removeEventListener('input', debounce(this.onInput, 300) as EventListener); // Odstránenie event listenerov pre input
+            });
+        });
+
         document.removeEventListener('keydown', this.closeOnEsc);
         document.removeEventListener('click', this.closeOnClick);
         this.issueListElement.removeEventListener('click', this.onIssueClick);

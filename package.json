@@ -1,8 +1,9 @@
 {
-  "name": "Test",
+  "name": "@imatic/whisperer",
   "version": "1.0.0",
-  "description": "Test",
-  "main": "app.js",
+  "license": "MIT",
+  "repository": "git@github.com:Imatic-IT/imatic-mantis-whisperer.git",
+  "private": false,
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "build:dev": "NODE_ENV=development webpack",
@@ -13,7 +14,6 @@
     "course"
   ],
   "author": "Maximilian Schwarzmüller",
-  "license": "ISC",
   "devDependencies": {
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.2",

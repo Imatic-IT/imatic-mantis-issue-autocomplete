@@ -10,15 +10,26 @@ The following settings can be customized:
 public function config(): array
 {
     return [
-        'min_search_length' => 3,
-        'search_issue_limit' => 100,
-        'exclude_view_states' => [80],
-        'autocomplete_issue_window_settings' =>
+        'minSearchLength' => 3,
+        'searchIssueLimit' => 100,
+        'excludeViewStates' => [90],
+        'autocompleteIssueWindowSettings' =>
             [
-                'width' => '40%',
-                'height' => '40%',
+                'width' => '50%',
+                'height' => '50%',
                 'background' => 'rgba(0, 0, 0, 0.8)',
             ],
+        'searchInputNames' => [
+            'dest_bug_id',
+            'bug_id',
+        ],
+        'fieldSeparator' => '&#x276F;',
+        'searchByFields' => [
+            'id' => true,
+            'description' => false,
+            'additional_information' => false,
+        ],
+        'submitOnSelect' => true,
     ];
 }
 ```
@@ -27,12 +38,36 @@ public function config(): array
 - search_issue_limit: The maximum number of issues to be searched and displayed.
 - exclude_view_states: Defines which issue states will be excluded from the search.
 - autocomplete_issue_window_settings: Settings for the modal window that displays the searched issues (width, height, background).
+- searchInputNames: Input field names that will be used for searching.
+- fieldSeparator: A character or icon used to visually separate fields in the search results. This separator will appear between the fields, making it easier for users to distinguish between different pieces of information. For example, using an arrow icon (e.g., `&#x276F;`) can enhance the readability of the displayed results by clearly indicating the relationship between the fields.
+- searchByFields: A configuration option that determines which fields will be included in the search criteria when querying the database. You can specify whether to enable searching by the following fields:
+    - id: If set to `true`, the plugin will search for issues by their unique identifier.
+    - description: If set to `true`, the plugin will search within the issue descriptions.
+    - additional_information: If set to `true`, the plugin will also include any additional information fields in the search criteria.
+- submitOnSelect: If set to true, allows immediate form submission upon selecting an issue.
+
+## Additional Features
+
+- **Search by Issue Number**: The plugin allows users to search for issues not only by their summary but also by their unique issue number. This includes support for formats with leading zeros, ensuring that all relevant issues can be easily found.
+
+- **Project Grouping**: When displaying search results, the plugin groups issues by the current project first. This means that if you are currently working within a specific project, any relevant issues from that project will be prioritized in the results. After grouping by the current project, the remaining issues are then organized by their respective project names.
+
+- **Sorting by Issue Status**: Within each project grouping, issues are sorted by their status.
+
 
 ## Installation
 - Copy all files from Imatic Mantis Issue Type Checker into the plugins/ImaticIssueAutocomplete directory.
 - In Mantis plugins page, install the plugin.
 
-
 ## Browser Requirements
 
 The plugin requires a modern browser that supports ES6 features. Ensure your browser is up-to-date to fully utilize the plugin's functionality.
+
+
+## Compatibility and Customization
+
+- **Database Compatibility**: This plugin has been tested primarily with PostgreSQL. The provided query for MySQL in the `plugins/ImaticIssueAutocomplete/pages/searchIssue.php` file may not function correctly and will need further testing and adjustments.
+
+- **Support for Other Databases**: Additional modifications are required to ensure compatibility with other database types. You can explore and implement necessary changes in the `buildFinalQuery()` method.
+
+If you have any questions or require further assistance, please feel free to contact us.

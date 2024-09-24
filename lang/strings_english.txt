@@ -1,5 +1,5 @@
 <?php
 
-$s_plugin_ImaticIssueAutocomplete_min_search_length_message = 'Minimum search length is %d characters.';
-$s_plugin_ImaticIssueAutocomplete_no_issue_found_message = 'No results found.';
-$s_plugin_ImaticIssueAutocomplete_search_for_issue_message = 'Search by summary';
+$s_plugin_ImaticWhisperer_min_search_length_message = 'Minimum search length is %d characters.';
+$s_plugin_ImaticWhisperer_no_issue_found_message = 'No results found.';
+$s_plugin_ImaticWhisperer_search_for_issue_message = 'Search by summary';
