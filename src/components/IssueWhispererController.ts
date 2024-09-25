@@ -66,9 +66,12 @@ export class IssueWhispererController {
   }
 
   private handleKeyPress(event: KeyboardEvent): void {
+    if (!this.isOverlayVisible()) return;
+
     if (event.key === 'Escape') return this.hideOverlay();
 
     if (['ArrowUp', 'ArrowDown', 'Enter'].includes(event.key)) {
+
       this.handleKeyboardNavigation(event);
     }
   }
@@ -95,6 +98,8 @@ export class IssueWhispererController {
     ) as HTMLLIElement;
 
     const moveHighlight = (newElement: HTMLElement) => {
+      if (!this.isOverlayVisible()) return;
+
       this.activeHighlightedIssue?.classList.remove(highlightedClass);
       this.activeHighlightedIssue = newElement as HTMLLIElement;
       this.activeHighlightedIssue.classList.add(highlightedClass);
@@ -124,7 +129,7 @@ export class IssueWhispererController {
         if (sibling) moveHighlight(sibling as HTMLLIElement);
       }
       if (event.key === 'Enter') {
-        if (!this.isOverlayVisible()) return;
+        // if (!this.isOverlayVisible()) return;
 
         event.preventDefault();
         const issueIdButton = this.activeHighlightedIssue.querySelector(
