@@ -20,10 +20,6 @@
     background-color: #0056b3;
 }
 
-.issue-summary {
-    /*flex: 1;*/
-}
-
 .no-issues-item {
     padding: 5px;
     text-align: center;
@@ -40,7 +36,17 @@
     display: block;
 }
 
-.issue-highlighted{
+.current-issue{
+    color: white;
+    font-style: oblique 30deg;
+    font-weight: bold;
+    font-size:14px;
+}
+
+.issue-selected-highlighted{
     background-color: #ffffff;
-    color: #1a1a1a;
+    color: #1a1a1a ;
+}
+.issue-selected-highlighted a{
+    color: #1a1a1a !important;
 }

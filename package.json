@@ -7,7 +7,8 @@
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "build:dev": "NODE_ENV=development webpack",
-    "watch": "NODE_ENV=development webpack --watch"
+    "watch": "NODE_ENV=development webpack --watch",
+    "format": "prettier --write ."
   },
   "keywords": [
     "typescript",
@@ -15,6 +16,7 @@
   ],
   "author": "Maximilian Schwarzmüller",
   "devDependencies": {
+    "prettier": "^3.3.3",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.2",
     "webpack": "^5.94.0",
