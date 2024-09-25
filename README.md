@@ -41,9 +41,9 @@ public function config(): array
 - searchInputNames: Input field names that will be used for searching.
 - fieldSeparator: A character or icon used to visually separate fields in the search results. This separator will appear between the fields, making it easier for users to distinguish between different pieces of information. For example, using an arrow icon (e.g., `&#x276F;`) can enhance the readability of the displayed results by clearly indicating the relationship between the fields.
 - searchByFields: A configuration option that determines which fields will be included in the search criteria when querying the database. You can specify whether to enable searching by the following fields:
-    - id: If set to `true`, the plugin will search for issues by their unique identifier.
-    - description: If set to `true`, the plugin will search within the issue descriptions.
-    - additional_information: If set to `true`, the plugin will also include any additional information fields in the search criteria.
+  - id: If set to `true`, the plugin will search for issues by their unique identifier.
+  - description: If set to `true`, the plugin will search within the issue descriptions.
+  - additional_information: If set to `true`, the plugin will also include any additional information fields in the search criteria.
 - submitOnSelect: If set to true, allows immediate form submission upon selecting an issue.
 
 ## Additional Features
@@ -53,9 +53,10 @@ public function config(): array
 - **Project Grouping**: When displaying search results, the plugin groups issues by the current project first. This means that if you are currently working within a specific project, any relevant issues from that project will be prioritized in the results. After grouping by the current project, the remaining issues are then organized by their respective project names.
 
 - **Sorting by Issue Status**: Within each project grouping, issues are sorted by their status.
-
+- **Keyboard Navigation**: When the overlay and issue list are visible, users can navigate through the search results using the arrow keys. Pressing the Enter key will insert the selected issue into the input field.
 
 ## Installation
+
 - Copy all files from Imatic Mantis Issue Type Checker into the plugins/ImaticWhisperer directory.
 - In Mantis plugins page, install the plugin.
 - run npm install
@@ -63,7 +64,6 @@ public function config(): array
 ## Browser Requirements
 
 The plugin requires a modern browser that supports ES6 features. Ensure your browser is up-to-date to fully utilize the plugin's functionality.
-
 
 ## Compatibility and Customization
 

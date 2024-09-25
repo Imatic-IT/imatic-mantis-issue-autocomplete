@@ -1,52 +1,55 @@
 .issue-item {
-    color: white;
-    padding: 5px;
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  color: white;
+  padding: 5px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .issue-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .issue-button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .no-issues-item {
-    padding: 5px;
-    text-align: center;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 30px;
+  padding: 5px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 30px;
 }
-
 
 .issue-search-input {
-    width: 90%;
-    margin: 5px auto;
-    border: 1px solid grey !important;
-    display: block;
+  width: 90%;
+  margin: 5px auto;
+  border: 1px solid grey !important;
+  display: block;
 }
 
-.current-issue{
-    color: white;
-    font-style: oblique 30deg;
-    font-weight: bold;
-    font-size:14px;
+.current-issue {
+  color: white;
+  font-style: oblique 30deg;
+  font-weight: bold;
 }
 
-.issue-selected-highlighted{
-    background-color: #ffffff;
-    color: #1a1a1a ;
+.issue-selected-highlighted {
+  background-color: #ffffff;
+  color: #1a1a1a;
 }
-.issue-selected-highlighted a{
-    color: #1a1a1a !important;
+.issue-selected-highlighted a {
+  color: #1a1a1a !important;
+}
+
+.issue-link {
+  min-width: 50px;
+  display: inline-block;
 }

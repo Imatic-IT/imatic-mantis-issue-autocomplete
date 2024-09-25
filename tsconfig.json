@@ -2,12 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "module": "es2015",
-    "lib": [
-      "dom",
-      "es6",
-      "dom.iterable",
-      "scripthost"
-    ],
+    "lib": ["dom", "es6", "dom.iterable", "scripthost"],
     "sourceMap": true,
     "outDir": "./files",
     "rootDir": "./src",
@@ -22,7 +17,5 @@
     "experimentalDecorators": true
   },
   "type": "module",
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
