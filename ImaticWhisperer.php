@@ -37,7 +37,7 @@ class ImaticWhispererPlugin extends MantisPlugin
                 'description' => false,
                 'additional_information' => false,
             ],
-            'submitOnSelect' => false,
+            'submitOnSelect' => true,
         ];
     }
 
