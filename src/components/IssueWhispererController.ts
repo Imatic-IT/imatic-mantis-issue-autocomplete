@@ -48,6 +48,7 @@ export class IssueWhispererController {
 
   setActiveInputField(input: HTMLInputElement): void {
     this.activeInputElement = input;
+    this.activeInputElement.autocomplete = 'off';
   }
 
   attachEventListeners(): void {
