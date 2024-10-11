@@ -4,7 +4,6 @@ header('Content-Type: application/json');
 require_api('authentication_api.php');
 auth_ensure_user_authenticated();
 
-
 class IssueSearch
 {
     private array $searchFields;
@@ -150,7 +149,6 @@ class IssueSearch
         return $query;
     }
 
-
     public function bindParamsAndFetchIssues(): array
     {
         $searchValue = '%' . $this->searchTerm . '%';
@@ -172,7 +170,6 @@ class IssueSearch
             }
         }
 
-
         $params[] = helper_get_current_project();
 
         $params[] = $this->issueLimit;
@@ -189,7 +186,8 @@ class IssueSearch
         $userId = $this->getUserId();
 
         while ($row = db_fetch_array($queryResult)) {
-            if (access_has_bug_level(user_get_access_level($userId), $row['id'], $userId)) {
+            $projectAccessLevel = access_get_project_level($row['project_id'], $userId);
+            if (access_has_bug_level($projectAccessLevel, $row['id'], $userId)) {
                 $row['id'] = bug_format_id($row['id']);
                 $row['project'] = project_get_name($row['project_id']);
                 $row['statusColor'] = html_get_status_css_fg($row['status']);
